@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПереТайп — Тренажер друку</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">ПереТайП</div>
+  <ul class="nav-links">
+    <li><button onclick="showPage('home')" class="active" id="nav-home">Головна</button></li>
+    <li><button onclick="showPage('type')" id="nav-type">Тренажер</button></li>
+    <li><button onclick="showPage('stats')" id="nav-stats">Статистика</button></li>
+    <li><button onclick="showPage('settings')" id="nav-settings">Налаштування</button></li>
+  </ul>
+  <div class="nav-right">
+    <div class="theme-toggle">
+      <button class="theme-toggle-btn" id="theme-light" onclick="setTheme('light')" title="Світла тема">☀️</button>
+      <button class="theme-toggle-btn active" id="theme-dark" onclick="setTheme('dark')" title="Темна тема">🌙</button>
+    </div>
+    <button class="lang-btn active" id="lang-uk" onclick="setLang('uk')">УКР</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')">ENG</button>
+    <button class="lang-btn" id="lang-ru" onclick="setLang('ru')">РУС</button>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <span class="hero-tag">⌨️ Тренажер швидкого друку</span>
+    <h1>
+      <span class="gr1">Друкуй</span><br>
+      <span class="gr2">швидше.</span>
+    </h1>
+    <p>ПереТайП допоможе тобі збільшити швидкість і точність друку через інтерактивні тренування. Підтримка трьох мов.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('type')">Почати тренування</button>
+      <button class="btn-secondary" onclick="showPage('stats')">Моя статистика</button>
+    </div>
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="stat-num" id="hs-wpm">0</div>
+        <div class="stat-label">Рекорд WPM</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="hs-acc">—</div>
+        <div class="stat-label">Краща точність</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="hs-tests">0</div>
+        <div class="stat-label">Тестів пройдено</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TYPING PAGE -->
+<div class="page" id="page-type">
+  <div class="type-header">
+    <div class="mode-tabs">
+      <button class="mode-tab active" onclick="setMode('time')" id="mode-time">Час</button>
+      <button class="mode-tab" onclick="setMode('words')" id="mode-words">Слова</button>
+    </div>
+    <div class="time-opts" id="time-opts">
+      <button class="time-opt active" onclick="setDuration(15)" id="dur-15">15с</button>
+      <button class="time-opt" onclick="setDuration(30)" id="dur-30">30с</button>
+      <button class="time-opt" onclick="setDuration(60)" id="dur-60">60с</button>
+      <button class="time-opt" onclick="setDuration(120)" id="dur-120">120с</button>
+    </div>
+    <div class="time-opts" id="words-opts" style="display:none">
+      <button class="time-opt active" onclick="setWordCount(10)" id="wc-10">10</button>
+      <button class="time-opt" onclick="setWordCount(25)" id="wc-25">25</button>
+      <button class="time-opt" onclick="setWordCount(50)" id="wc-50">50</button>
+    </div>
+  </div>
+
+  <div class="live-stats">
+    <div class="live-stat">
+      <div class="live-val" id="live-wpm">0</div>
+      <div class="live-lbl">WPM</div>
+    </div>
+    <div class="timer-ring">
+      <svg viewBox="0 0 80 80" width="80" height="80">
+        <circle class="timer-bg" cx="40" cy="40" r="36"/>
+        <circle class="timer-fg" id="timer-circle" cx="40" cy="40" r="36"
+          stroke-dasharray="226" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-num" id="timer-display">—</div>
+    </div>
+    <div class="live-stat">
+      <div class="live-val" id="live-acc">—</div>
+      <div class="live-lbl">Точність</div>
+    </div>
+  </div>
+
+  <div class="text-box" id="text-box" onclick="focusInput()">
+    <div id="text-display"></div>
+    <input type="text" id="hidden-input" autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" oninput="handleInput(event)" onkeydown="handleKey(event)">
+  </div>
+  <div class="restart-hint">
+    <kbd>Tab</kbd> + <kbd>Enter</kbd> — перезапустити &nbsp;|&nbsp; <kbd>Esc</kbd> — скинути
+  </div>
+</div>
+
+<!-- STATS PAGE -->
+<div class="page" id="page-stats">
+  <h2>Моя статистика</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-val" id="s-best-wpm">0</div>
+      <div class="stat-card-lbl">Рекорд WPM</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val" id="s-avg-wpm">0</div>
+      <div class="stat-card-lbl">Середній WPM</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val" id="s-best-acc">—</div>
+      <div class="stat-card-lbl">Краща точність</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val" id="s-total">0</div>
+      <div class="stat-card-lbl">Тестів пройдено</div>
+    </div>
+  </div>
+  <div class="history-table">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>WPM</th><th>Точність</th><th>Тривалість</th><th>Мова</th><th>Дата</th>
+        </tr>
+      </thead>
+      <tbody id="history-body"></tbody>
+    </table>
+    <div id="no-history" class="no-history">Ще немає результатів. Пройди перший тест!</div>
+  </div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div class="page" id="page-settings">
+  <h2>Налаштування</h2>
+  <div class="settings-group">
+    <h3>Тренажер</h3>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Пунктуація</div>
+        <div class="setting-desc">Додавати розділові знаки до тексту</div>
+      </div>
+      <button class="toggle" id="toggle-punct" onclick="toggleSetting('punct')"></button>
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Цифри</div>
+        <div class="setting-desc">Додавати числа до тексту</div>
+      </div>
+      <button class="toggle" id="toggle-nums" onclick="toggleSetting('nums')"></button>
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Звуки натискань</div>
+        <div class="setting-desc">Звуковий зворотній зв'язок при друці</div>
+      </div>
+      <button class="toggle on" id="toggle-sound" onclick="toggleSetting('sound')"></button>
+    </div>
+  </div>
+  <div class="settings-group">
+    <h3>Відображення</h3>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Розмір шрифту</div>
+      </div>
+      <select class="select-setting" id="font-size-select" onchange="changeFontSize(this.value)">
+        <option value="1">Малий</option>
+        <option value="1.2" selected>Середній</option>
+        <option value="1.4">Великий</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Мова сайту</div>
+      </div>
+      <select class="select-setting" id="lang-select" onchange="setLang(this.value)">
+        <option value="uk">Українська</option>
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">Очистити статистику</div>
+        <div class="setting-desc">Видалити всю історію результатів</div>
+      </div>
+      <button class="btn-secondary" onclick="clearStats()" style="padding:8px 16px;font-size:0.8rem;">Очистити</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS OVERLAY -->
+<div class="results-overlay" id="results-overlay">
+  <div class="results-card">
+    <div class="results-title">✦ Результат</div>
+    <div class="results-wpm" id="res-wpm">0</div>
+    <div class="results-wpm-label">слів на хвилину</div>
+    <div class="results-grid">
+      <div>
+        <div class="res-stat-val" id="res-acc">—</div>
+        <div class="res-stat-lbl">Точність</div>
+      </div>
+      <div>
+        <div class="res-stat-val" id="res-correct">0</div>
+        <div class="res-stat-lbl">Правильних</div>
+      </div>
+      <div>
+        <div class="res-stat-val" id="res-errors">0</div>
+        <div class="res-stat-lbl">Помилок</div>
+      </div>
+    </div>
+    <div class="results-btns">
+      <button class="btn-primary" onclick="restartTest()">Ще раз</button>
+      <button class="btn-secondary" onclick="closeResults()">Закрити</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/state.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/translations.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
