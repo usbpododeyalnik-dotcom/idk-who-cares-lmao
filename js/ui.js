@@ -198,14 +198,7 @@ function generateText() {
   
   // Insert numbers in words without splice (avoids array position shifting)
   if (state.settings.nums) {
-    let newWords = [];
-    for(let i=0;i<words.length;i++) {
-      if (i > 0 && i % 7 === 0) {
-        newWords.push(String(Math.floor(Math.random()*100)));
-      }
-      newWords.push(words[i]);
-    }
-    words = newWords;
+    for(let i=0;i<words.length;i+=7) words.splice(i,0,String(Math.floor(Math.random()*100)));
   }
   
   if (state.settings.punct) {
