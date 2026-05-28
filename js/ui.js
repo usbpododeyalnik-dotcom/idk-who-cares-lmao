@@ -74,10 +74,11 @@ function handleInput(e) {
 
   if(!state.started) startTest();
 
-  // Check for Caps Lock
+  // Check for Caps Lock - improved detection
   if (state.pos === 0 && val.length === 1) {
-    const isCapsOn = val !== val.toLowerCase() && val === val.toUpperCase();
-    if (isCapsOn) {
+    const expectedChar = state.text[state.pos];
+    // Only warn if typing capital letter when lowercase expected (with no modifiers)
+    if (isCapitalLetter(val) && isLowercaseLetter(expectedChar)) {
       showWarning(t('caps_warning'));
     }
   }
@@ -196,9 +197,16 @@ function generateText() {
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
   }
   
-  // Insert numbers in words without splice (avoids array position shifting)
+  // Insert numbers - randomized, not always at start
   if (state.settings.nums) {
-    for(let i=0;i<words.length;i+=7) words.splice(i,0,String(Math.floor(Math.random()*100)));
+    const positions = [];
+    for(let i=1;i<words.length;i+=7) {
+      positions.push(i);
+    }
+    // Insert from end to start to maintain positions
+    for(let i=positions.length-1;i>=0;i--) {
+      words.splice(positions[i], 0, String(Math.floor(Math.random()*100)));
+    }
   }
   
   if (state.settings.punct) {
