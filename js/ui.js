@@ -74,9 +74,9 @@ function handleInput(e) {
 
   if(!state.started) startTest();
 
-  // Check for Caps Lock
+  // Check for Caps Lock using getModifierState instead of case comparison
   if (state.pos === 0 && val.length === 1) {
-    const isCapsOn = val !== val.toLowerCase() && val === val.toUpperCase();
+    const isCapsOn = e.getModifierState('CapsLock');
     if (isCapsOn) {
       showWarning(t('caps_warning'));
     }
@@ -196,9 +196,18 @@ function generateText() {
     words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
   }
   
+  // Insert numbers in words without splice (avoids array position shifting)
   if (state.settings.nums) {
-    for(let i=0;i<words.length;i+=7) words.splice(i,0,String(Math.floor(Math.random()*100)));
+    let newWords = [];
+    for(let i=0;i<words.length;i++) {
+      if (i > 0 && i % 7 === 0) {
+        newWords.push(String(Math.floor(Math.random()*100)));
+      }
+      newWords.push(words[i]);
+    }
+    words = newWords;
   }
+  
   if (state.settings.punct) {
     const puncts = [',','.',',','!','?',';'];
     for(let i=3;i<words.length;i+=4) words[i] += puncts[Math.floor(Math.random()*puncts.length)];
