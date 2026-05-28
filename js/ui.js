@@ -74,9 +74,9 @@ function handleInput(e) {
 
   if(!state.started) startTest();
 
-  // Check for Caps Lock using getModifierState instead of case comparison
+  // Check for Caps Lock
   if (state.pos === 0 && val.length === 1) {
-    const isCapsOn = e.getModifierState('CapsLock');
+    const isCapsOn = val !== val.toLowerCase() && val === val.toUpperCase();
     if (isCapsOn) {
       showWarning(t('caps_warning'));
     }
