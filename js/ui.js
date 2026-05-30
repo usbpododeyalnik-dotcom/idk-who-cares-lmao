@@ -239,9 +239,29 @@ function renderText() {
     const display = ch === ' ' ? '&nbsp;' : ch;
     return `<span class="char ${cls}" id="c${i}">${display}</span>`;
   }).join('');
-  // Scroll into view
-  const cur = document.getElementById('c'+state.pos);
-  if(cur) cur.scrollIntoView({block:'nearest', inline:'nearest'});
+  
+  // Scroll to keep current character visible
+  scrollTextToChar(state.pos);
+}
+
+function scrollTextToChar(charIndex) {
+  const textBox = document.getElementById('text-box');
+  const cur = document.getElementById('c' + charIndex);
+  
+  if (!cur || !textBox) return;
+  
+  const textDisplay = document.getElementById('text-display');
+  const boxWidth = textBox.clientWidth - 64; // 32px padding on each side
+  const charPos = cur.offsetLeft;
+  const charWidth = cur.offsetWidth;
+  
+  // Calculate how much to scroll so the current char is roughly in the middle
+  let scrollAmount = charPos - boxWidth / 3;
+  
+  // Don't scroll backwards
+  scrollAmount = Math.max(0, scrollAmount);
+  
+  textDisplay.style.transform = `translateX(-${scrollAmount}px)`;
 }
 
 // ---- TIMER ----
