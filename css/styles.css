@@ -310,11 +310,21 @@ html.light-theme nav {
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 32px;
 }
 
 .stat-item:hover {
   transform: translateY(-8px);
-  filter: brightness(1.15);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent);
+}
+
+html.light-theme .stat-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--accent);
 }
 
 .stat-num {
@@ -747,20 +757,21 @@ html.light-theme .results-overlay {
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 24px;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .stat-card:hover {
   transform: translateY(-8px);
-  background: var(--surface2);
+  background: rgba(255, 255, 255, 0.15);
   border-color: var(--accent);
   box-shadow: 0 12px 24px rgba(255,255,255,0.1);
 }
 
 html.light-theme .stat-card:hover {
+  background: rgba(0, 0, 0, 0.05);
   box-shadow: 0 12px 24px rgba(0,0,0,0.1);
 }
 
