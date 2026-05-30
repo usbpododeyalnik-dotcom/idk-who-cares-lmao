@@ -523,8 +523,6 @@ html.light-theme .stat-item:hover {
   letter-spacing: 0;
   user-select: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
-  white-space: nowrap;
-  transition: transform 0.05s;
 }
 
 .char {
