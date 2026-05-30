@@ -308,6 +308,13 @@ html.light-theme nav {
 
 .stat-item {
   text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.stat-item:hover {
+  transform: translateY(-8px);
+  filter: brightness(1.15);
 }
 
 .stat-num {
@@ -742,7 +749,19 @@ html.light-theme .results-overlay {
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 20px;
-  transition: background 0.3s, border-color 0.3s;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px);
+  background: var(--surface2);
+  border-color: var(--accent);
+  box-shadow: 0 12px 24px rgba(255,255,255,0.1);
+}
+
+html.light-theme .stat-card:hover {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
 }
 
 .stat-card-val {
